@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   HttpException,
+  UsePipes,
+  ValidationPipe,
   HttpStatus,
 } from '@nestjs/common';
  import { AuthService } from './auth.service';
@@ -16,6 +18,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('register')
+  @UsePipes(new ValidationPipe())
   async register(@Body() createUserDto: CreateUserDto) {
     try {
       await this.authService.save_new(createUserDto);

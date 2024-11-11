@@ -17,4 +17,5 @@
   "ts-node": {
     "transpileOnly": true
   }
+   
 }
