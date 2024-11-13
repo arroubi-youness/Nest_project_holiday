@@ -1,4 +1,5 @@
-import { IsString,IsEmail, IsNotEmpty } from "class-validator";
+import { IsString,IsEmail, IsNotEmpty, IsNumber, IsInt } from "class-validator";
+import { Transform } from "class-transformer";
 
 export class CreateUserDto {
 
@@ -21,6 +22,11 @@ export class CreateUserDto {
     @IsEmail()
     @IsNotEmpty()
     readonly email!:string;
+
+    @Transform(({ value }) => Number(value))
+    @IsInt()
+    @IsNotEmpty()
+    readonly age!:number;
 
     @IsString()
     @IsNotEmpty()
