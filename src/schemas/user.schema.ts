@@ -1,24 +1,43 @@
-import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcryptjs';
-
-export const userScehma = new mongoose.Schema({
-  name: String,
-  familyName:String,
-  email: {
-    type: String,
-    required: true,
-    unique: true  
-},
-  position:String,
-  salaire:String,
-  password:String,
-  age: Number,
-  refreshToken: {
-    type: String,  
-  }
- });
  
- userScehma.pre('save', async function (next) {
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import * as bcrypt from 'bcryptjs';
+import { HydratedDocument } from 'mongoose';
+
+export type Userdocument = HydratedDocument<User>;
+
+
+@Schema()
+export class User extends Document {
+  @Prop({ required: true })
+  name!: string;
+
+  @Prop({ required: true })
+  familyName!: string;
+
+  @Prop({ required: true, unique: true })
+  email!: string;
+
+  @Prop()
+  position!: string;
+
+  @Prop()
+  salaire!: string;
+
+  @Prop({ required: true })
+  password!: string;
+
+  @Prop()
+  age!: number;
+
+  @Prop()
+  refreshToken?: string;
+}
+
+ export const UserSchema = SchemaFactory.createForClass(User);
+
+ 
+ UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();   
   const salt = await bcrypt.genSalt(10);             
   if (typeof this.password === 'string') {   
@@ -28,14 +47,3 @@ export const userScehma = new mongoose.Schema({
   }     
   return next();
 });
-
- export interface User extends mongoose.Document {
-  name: string;
-  familyName: string;
-  email: string;
-  position?: string;
-  salaire?: string;
-  password: string;
-  age: number;
-  refreshToken?: string;   
-}

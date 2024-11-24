@@ -10,20 +10,24 @@ import {
   UsePipes,
   ValidationPipe,
   HttpStatus,
+  UseGuards,
+  HttpCode,
+  Request
 } from '@nestjs/common';
- import { AuthService } from './auth.service';
+import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
- 
+import {AuthGuard} from './auth.guard';
+
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('register')
-  @UsePipes(new ValidationPipe())
+  @UsePipes(ValidationPipe)
     async register(@Body() createUserDto: CreateUserDto) {
     try {
       await this.authService.save_new(createUserDto);
-      return { message: 'User successfully created' };
+      return { "message": 'User successfully created' };
     } catch (error) {
        if ((error as any).code === 11000) {  
         throw new HttpException(
@@ -43,4 +47,18 @@ export class AuthController {
       );
     }
   }
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  async login(@Body() a:CreateUserDto){
+    
+    return this.authService.login_handle(a.email,a.password);
+ 
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req:any) {
+    return req.user;
+  }
+
 }
