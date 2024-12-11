@@ -1,12 +1,10 @@
 import { Injectable,Inject } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-// import { userProvides } from './user.providers';
-import { Model } from 'mongoose';
+ import { Model } from 'mongoose';
 import { User } from '../schemas/user.schema';
-import { InjectModel,InjectConnection } from '@nestjs/mongoose';
-import { Connection } from 'mongoose';
- 
+import { InjectModel } from '@nestjs/mongoose';
+  
 
 
 @Injectable()
@@ -34,7 +32,7 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userModel.find();
   }
 
   async finduser(email: String) {

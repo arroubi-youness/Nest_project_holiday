@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../../react_projects/my-project"
+		},
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../tp_4_java"
+		}
+	],
+	"settings": {}
+}

@@ -3,10 +3,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { HydratedDocument } from 'mongoose';
+import * as crypto from 'crypto';
 
 export type Userdocument = HydratedDocument<User>;
-
-
+ 
 @Schema()
 export class User extends Document {
   @Prop({ required: true })
@@ -30,11 +30,17 @@ export class User extends Document {
   @Prop()
   age!: number;
 
+
+  @Prop()
+  identifyToken?: string;
+
+
   @Prop()
   refreshToken?: string;
+
 }
 
- export const UserSchema = SchemaFactory.createForClass(User);
+  const UserSchema = SchemaFactory.createForClass(User);
 
  
  UserSchema.pre('save', async function (next) {
@@ -44,6 +50,10 @@ export class User extends Document {
     this.password = await bcrypt.hash(this.password, salt);  
   } else {
     return next(new Error('Password must be a string'));
-  }     
+  }   
+  
+  this.identifyToken=crypto.randomBytes(16).toString('hex').slice(0, 16)
   return next();
 });
+
+export {UserSchema};

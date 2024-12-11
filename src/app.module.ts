@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { TrackingModule } from './tracking/tracking.module';
+import { QrcodeModule } from './qrcode/qrcode.module';
 
 @Module({
   imports: [
@@ -11,6 +13,8 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    TrackingModule,
+    QrcodeModule,
   ],
 })
 export class AppModule {}
