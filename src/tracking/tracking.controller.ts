@@ -17,8 +17,7 @@ import { CreateTrackingDto } from './dto/create-tracking.dto';
 import { Response } from 'express';
 import { Types } from 'mongoose';
 import { ToObjectIdInterceptor } from './tracking.interceptor';
-import { types } from 'util';
-
+ 
 @Controller('tracking')
 export class TrackingController {
   constructor(private readonly trackingService: TrackingService) {}
@@ -63,14 +62,13 @@ export class TrackingController {
     return this.trackingService.update(id, date_out);
   }
 
-  @Get('all')
-  async findall() {
+  @Get('check_abscent')
+  async abscent() {
     try {
       const this_day_time = new Date();
       const this_day_number = this_day_time.getDate();
       const this_day_month = this_day_time.getMonth();
-      console.log(this_day_number);
-      console.log(this_day_month);
+      
 
       const all_user = await this.trackingService.check_abscence();
 

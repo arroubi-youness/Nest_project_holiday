@@ -2,7 +2,6 @@ import { Prop,Schema,SchemaFactory } from "@nestjs/mongoose";
 import { Document } from 'mongoose';
 import { HydratedDocument } from "mongoose";
 import { Types } from "mongoose";
-
 export type TrackSchema = HydratedDocument<Track>;
 
 
