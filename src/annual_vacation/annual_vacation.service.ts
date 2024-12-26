@@ -5,7 +5,7 @@ import { Annual_vacation_Schema, Annual_vacation } from '../schemas/annual_vacat
 import {UserService} from '../user/user.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { generatePDF, sendEmailWithPDF } from '../tesgt/f'
+import { generatePDF, sendEmailWithPDF } from '../email_and_pdf_functions/f'
 import * as fs from 'fs';
 
 @Injectable()
