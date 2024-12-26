@@ -4,8 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
  import { Model } from 'mongoose';
 import { User } from '../schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-  
-
+import {  Types } from "mongoose";
 
 @Injectable()
 export class UserService {
@@ -40,6 +39,9 @@ export class UserService {
       
 
   }
+  async findOneById(userId: Types.ObjectId): Promise<User | null> {
+    return this.userModel.findById(userId).exec();
+  }  
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;

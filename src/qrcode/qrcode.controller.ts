@@ -11,7 +11,7 @@ export class QrcodeController {
      const qrCodeBuffer = await this.qrcodeService.generateQRCode();
 
      res.set('Content-Type', 'image/png');
-
+   
      res.send(qrCodeBuffer);
   }
 }
