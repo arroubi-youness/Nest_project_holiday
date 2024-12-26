@@ -4,7 +4,7 @@ import { HydratedDocument } from "mongoose";
 import { Types } from "mongoose";
 import { User } from './user.schema';
 import moment from 'moment';
-
+ 
 export type TrackSchema = HydratedDocument<Maladie_vacation>;
 
 @Schema()
@@ -15,8 +15,10 @@ export class Maladie_vacation extends Document{
         required: true 
       })
       User_id_ref!: Types.ObjectId;
-      @Prop()
+      @Prop({ type: Buffer })
       Certificate_medical!: Buffer;
+      @Prop()
+      demande_Status!: string;
 
       @Prop({
         type: Date,
@@ -34,7 +36,16 @@ export class Maladie_vacation extends Document{
       
 
 }
-const Annual_vacation_Schema = SchemaFactory.createForClass(Maladie_vacation);
-export {Annual_vacation_Schema};
+const Maladie_vacation_Schema = SchemaFactory.createForClass(Maladie_vacation);
+Maladie_vacation_Schema.pre('save',async function(next){
+
+  this.User_id_ref=new Types.ObjectId(this.User_id_ref);
+ 
+  
+  
+ return next();
+ 
+});
+export {Maladie_vacation_Schema};
 
 

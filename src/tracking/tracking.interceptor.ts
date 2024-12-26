@@ -7,13 +7,12 @@ import { tap } from 'rxjs/operators';
 export class ToObjectIdInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request=context.switchToHttp().getRequest();
-    console.log(request);
-    request.params.id=new Types.ObjectId(request.params.id);
+     request.params.id=new Types.ObjectId(request.params.id);
 
      return next
       .handle()
       .pipe(
         tap(() => console.log(`chanegd to object id`)),
-      );
+      ); 
   }
 }

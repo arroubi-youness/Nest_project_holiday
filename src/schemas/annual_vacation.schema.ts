@@ -9,7 +9,7 @@ export type Annual_vacation_Schema = HydratedDocument<Annual_vacation>;
 @Schema()
 export class Annual_vacation extends Document{
     @Prop({ 
-        type: Types.ObjectId,  
+        type: Types.ObjectId,
         ref: 'User', 
         required: true 
       })
@@ -20,14 +20,14 @@ export class Annual_vacation extends Document{
       @Prop({
         type: Date,
         get: (value: string) => new Date(value),
-        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString(),
+        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString().split('T')[0],
       })
       Start_date!: Date;
 
       @Prop({
         type: Date,
         get: (value: string) => new Date(value),
-        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString(),
+        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString().split('T')[0],
       })
       End_date!: Date;
 

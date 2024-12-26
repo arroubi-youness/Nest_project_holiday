@@ -17,8 +17,8 @@ import { AnnualVacationModule } from './annual_vacation/annual_vacation.module';
     }),
     TrackingModule,
     QrcodeModule,
-     MaladieVacationModule,
-     AnnualVacationModule,
+    MaladieVacationModule,
+    AnnualVacationModule,
   ],
 })
 export class AppModule {}

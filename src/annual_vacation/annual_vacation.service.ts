@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnnualVacationDto } from './dto/create-annual_vacation.dto';
 import { UpdateAnnualVacationDto } from './dto/update-annual_vacation.dto';
-import { Annual_vacation_Schema, Annual_vacation } from '../schemas/annual_vacation.schema';
+import { Annual_vacation } from '../schemas/annual_vacation.schema';
 import {UserService} from '../user/user.service';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AnnualVacationService {
