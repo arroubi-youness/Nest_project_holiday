@@ -15,18 +15,19 @@ export class AnnualVacationController {
   @Get()
   findAll() {
     return this.annualVacationService.findAll();
+  } 
+
+ 
+
+  @Get('jbed')
+  update() {
+    return this.annualVacationService.update();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.annualVacationService.findOne(+id);
+  @Patch('update-status/:id')
+  async updateStatus( @Param('id') id: string,@Body('status') status: 'accepté' | 'refusé',) {
+    return await this.annualVacationService.demendestauts(id, status);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAnnualVacationDto: UpdateAnnualVacationDto) {
-    return this.annualVacationService.update(+id, updateAnnualVacationDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.annualVacationService.remove(+id);

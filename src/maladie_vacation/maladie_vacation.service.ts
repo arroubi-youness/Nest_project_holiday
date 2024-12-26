@@ -1,11 +1,11 @@
 import { Injectable,HttpException,HttpStatus } from '@nestjs/common';
 import { CreateMaladieVacationDto } from './dto/create-maladie_vacation.dto';
-import { UpdateMaladieVacationDto } from './dto/update-maladie_vacation.dto';
-import { Maladie_vacation } from '../schemas/maladie.schema';
+ import { Maladie_vacation } from '../schemas/maladie.schema';
 import {UserService} from '../user/user.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model,Types } from 'mongoose';
- 
+import { generatePDF, sendEmailWithPDF } from '../email_and_pdf_functions/f'
+import * as fs from 'fs';
 @Injectable()
 export class MaladieVacationService {
   constructor(
@@ -65,15 +65,42 @@ export class MaladieVacationService {
     }
     }
   }
+ 
+  async demendestauts(id: string, status: 'accepté' | 'refusé'){
+    try {
+    const demande = await this.maladie_vacation_Model.findById(id);
+    if (!demande) {
+      throw new Error('Demande introuvable');
+    }
+    demande.demande_Status = status;
+       await demande.save();
+       if (status === 'accepté') { 
+        const user = await this.user.findOneById(demande.User_id_ref);
+        if (!user) {
+          throw new Error('Utilisateur introuvable');
+        }
+ 
+         const pdfPath = await generatePDF(demande, user.name,user.familyName);
+        await sendEmailWithPDF(user.email, pdfPath);
+  
+        fs.unlinkSync(pdfPath);
+      }
+  
+    return {
+      message: `Le statut de la demande mis a jour`,
+    };
+    
+    } catch (error) {
+    console.error(error);
+  }
+  }
 
 
   findOne(id: number) {
     return `This action returns a #${id} maladieVacation`;
   }
 
-  update(id: number, updateMaladieVacationDto: UpdateMaladieVacationDto) {
-    return `This action updates a #${id} maladieVacation`;
-  }
+   
 
   remove(id: number) {
     return `This action removes a #${id} maladieVacation`;

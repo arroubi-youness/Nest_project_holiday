@@ -4,12 +4,14 @@ import { UpdateAnnualVacationDto } from './dto/update-annual_vacation.dto';
 import { Annual_vacation } from '../schemas/annual_vacation.schema';
 import {UserService} from '../user/user.service';
 import { InjectModel } from '@nestjs/mongoose';
+import { generatePDF, sendEmailWithPDF } from '../email_and_pdf_functions/f'
+import * as fs from 'fs';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class AnnualVacationService {
   constructor(
-    @InjectModel(Annual_vacation.name)
+    @InjectModel(Annual_vacation.name) 
     private Annual_vacation_Model: Model<Annual_vacation>,private user:UserService
   ) {}
   async create(createAnnualVacationDto: CreateAnnualVacationDto):Promise<any>{
@@ -18,7 +20,7 @@ export class AnnualVacationService {
       const savedTracking = await created_annual_vacation.save();
     }catch(error){
         console.error(error);
-    }
+    } 
     return 'demande sent succsefuly';
   }
 
@@ -30,9 +32,40 @@ export class AnnualVacationService {
     return `This action returns a #${id} annualVacation`;
   }
 
-  update(id: number, updateAnnualVacationDto: UpdateAnnualVacationDto) {
-    return `This action updates a #${id} annualVacation`;
+  
+ async  update() {
+    const created_annual_vacation =  await this.Annual_vacation_Model.find({demande_Status:"Pending"});
+     return created_annual_vacation;
   }
+  async demendestauts(id: string, status: 'accepté' | 'refusé'){
+    try {
+    const demande = await this.Annual_vacation_Model.findById(id);
+    if (!demande) {
+      throw new Error('Demande introuvable');
+    }
+    demande.demande_Status = status;
+       await demande.save();
+       if (status === 'accepté') { 
+        const user = await this.user.findOneById(demande.User_id_ref);
+        if (!user) {
+          throw new Error('Utilisateur introuvable');
+        }
+ 
+         const pdfPath = await generatePDF(demande, user.name,user.familyName);
+        await sendEmailWithPDF(user.email, pdfPath);
+  
+        fs.unlinkSync(pdfPath);
+      }
+  
+    return {
+      message: `Le statut de la demande mis a jour`,
+    };
+    
+    } catch (error) {
+    console.error(error);
+  }
+  }
+
 
   remove(id: number) {
     return `This action removes a #${id} annualVacation`;

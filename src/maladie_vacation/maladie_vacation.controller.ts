@@ -91,12 +91,9 @@ export class MaladieVacationController {
   //   return this.maladieVacationService.findOne(+id);
   // }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateMaladieVacationDto: UpdateMaladieVacationDto,
-  ) {
-    return this.maladieVacationService.update(+id, updateMaladieVacationDto);
+  @Patch('update-status-maladie/:id')
+  async updateStatus( @Param('id') id: string,@Body('status') status: 'accepté' | 'refusé',) {
+    return await this.maladieVacationService.demendestauts(id, status);
   }
 
   @Delete(':id')
