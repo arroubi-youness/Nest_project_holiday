@@ -5,6 +5,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
  import { Types } from 'mongoose';  
+import { Roles } from '../roles/roles.decorator';
 
 
 @Injectable()
@@ -29,7 +30,7 @@ export class AuthService {
      if (!isMatch) {
       throw new UnauthorizedException();  
     }
-    const payload = { sub: user._id, username: user.email };
+    const payload = { sub: user._id, username: user.email,roles:user.roles};
     if (!(user._id instanceof Types.ObjectId)) {
       throw new Error('User does not have an identity token');
     }

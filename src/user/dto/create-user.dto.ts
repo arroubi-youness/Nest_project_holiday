@@ -1,6 +1,6 @@
-import { IsString,IsEmail, IsNotEmpty, IsNumber, IsInt } from "class-validator";
+import { IsString,IsEmail, IsNotEmpty, IsNumber, IsInt,IsArray,IsOptional } from "class-validator";
 import { Transform } from "class-transformer";
-
+import { Role } from "../../roles/roles.enum";
 export class CreateUserDto {
 
     @IsString()
@@ -31,6 +31,8 @@ export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     readonly password!: string;
+    @IsOptional()
+    @IsArray()
+    roles?: Role[];
 
-    
 }
