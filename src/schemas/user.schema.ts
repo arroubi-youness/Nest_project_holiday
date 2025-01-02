@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { HydratedDocument } from 'mongoose';
 import * as crypto from 'crypto';
-
+import { Role } from '../roles/roles.enum';
 export type Userdocument = HydratedDocument<User>;
  
 @Schema()
@@ -29,7 +29,9 @@ export class User extends Document {
 
   @Prop()
   age!: number;
-
+ 
+  @Prop()
+  roles!: Role[];
 
   @Prop()
   identifyToken?: string;

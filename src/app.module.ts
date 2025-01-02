@@ -6,7 +6,7 @@ import { TrackingModule } from './tracking/tracking.module';
 import { QrcodeModule } from './qrcode/qrcode.module';
  import { MaladieVacationModule } from './maladie_vacation/maladie_vacation.module';
 import { AnnualVacationModule } from './annual_vacation/annual_vacation.module';
-
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     AuthModule,
@@ -19,6 +19,8 @@ import { AnnualVacationModule } from './annual_vacation/annual_vacation.module';
     QrcodeModule,
     MaladieVacationModule,
     AnnualVacationModule,
+    UserModule
   ],
 })
 export class AppModule {}
+ 

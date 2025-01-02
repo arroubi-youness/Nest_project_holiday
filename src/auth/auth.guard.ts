@@ -26,8 +26,9 @@ export class AuthGuard implements CanActivate {
         secret: this.configService.get<string>('acces_token'),
       });
        reqeust['user'] = payload;
+       console.log('User in request:', reqeust['user']);
      } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(); 
     }
 
     return true;
