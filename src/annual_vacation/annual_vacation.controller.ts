@@ -9,6 +9,7 @@ export class AnnualVacationController {
 
   @Post("annualVaction")
   create(@Body() createAnnualVacationDto: CreateAnnualVacationDto) {
+    console.log(createAnnualVacationDto);
     return this.annualVacationService.create(createAnnualVacationDto);
   }
 

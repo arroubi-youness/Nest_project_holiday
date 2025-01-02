@@ -4,6 +4,7 @@ import { Track } from '../schemas/tracking.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import {UserService} from '../user/user.service';
+
  @Injectable()
 export class TrackingService {
   constructor(

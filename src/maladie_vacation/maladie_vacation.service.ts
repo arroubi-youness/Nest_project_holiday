@@ -25,7 +25,9 @@ export class MaladieVacationService {
   }
     
   }
-
+  async findById(userId: Types.ObjectId): Promise<any> {
+    return await this.maladie_vacation_Model.find({"User_id_ref":userId});
+  }
   async findAll():Promise<any>{
   try{
     const demandes = await this.maladie_vacation_Model.find({ demande_Status: 'Pending' });
@@ -78,16 +80,18 @@ export class MaladieVacationService {
         const user = await this.user.findOneById(demande.User_id_ref);
         if (!user) {
           throw new Error('Utilisateur introuvable');
+
+      
         }
  
-         const pdfPath = await generatePDF(demande, user.name,user.familyName);
+         const pdfPath = await generatePDF(demande, user.name,user.familyName,2);
         await sendEmailWithPDF(user.email, pdfPath);
   
         fs.unlinkSync(pdfPath);
       }
-  
+
     return {
-      message: `Le statut de la demande mis a jour`,
+      message: `Le statut de la demande mise a jour`,
     };
     
     } catch (error) {

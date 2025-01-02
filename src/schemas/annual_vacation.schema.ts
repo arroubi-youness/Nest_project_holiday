@@ -20,16 +20,17 @@ export class Annual_vacation extends Document{
       @Prop({
         type: Date,
         get: (value: string) => new Date(value),
-        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString().split('T')[0],
+        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString(),
       })
       Start_date!: Date;
 
       @Prop({
         type: Date,
         get: (value: string) => new Date(value),
-        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString().split('T')[0],
+        set: (value: string) => moment(value, 'MM/DD/YYYY').toDate().toISOString(),
       })
       End_date!: Date;
+
 
       @Prop()
       Remainain_day!:number;

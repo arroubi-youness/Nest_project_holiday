@@ -9,5 +9,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports:[UserModule,MongooseModule.forFeature([{name:Maladie_vacation.name, schema:Maladie_vacation_Schema}])],
   controllers: [MaladieVacationController],
   providers: [MaladieVacationService],
+  exports: [MaladieVacationService],
 })
 export class MaladieVacationModule {}

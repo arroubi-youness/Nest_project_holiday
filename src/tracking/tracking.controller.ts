@@ -17,10 +17,12 @@ import { CreateTrackingDto } from './dto/create-tracking.dto';
 import { Response } from 'express';
 import { Types } from 'mongoose';
 import { ToObjectIdInterceptor } from './tracking.interceptor';
+import { MaladieVacationService } from '../maladie_vacation/maladie_vacation.service';
+import { AnnualVacationService } from '../annual_vacation/annual_vacation.service';
  
 @Controller('tracking')
 export class TrackingController {
-  constructor(private readonly trackingService: TrackingService) {}
+  constructor(private readonly trackingService: TrackingService,private maladie:MaladieVacationService,private conge:AnnualVacationService) {}
 
   @Post('check_in')
   async create(
@@ -45,16 +47,6 @@ export class TrackingController {
       );
     }
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.trackingService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.trackingService.findOne(+id);
-  // }
 
   @UseInterceptors(ToObjectIdInterceptor)
   @Patch('checkout/:id')
@@ -92,21 +84,69 @@ export class TrackingController {
         }
       });
 
-      const day_abscent = new Date().toDateString();
+      const day_abscent = new Date();
       abscent_id.map(async (element) => {
-        let new_absennt_track = {
-          User_id_ref: element,
-          check_in_date: undefined,
-          check_out_date: undefined,
-          abscent_date: day_abscent,
-          Status: 'abscent',
-          abscent_status: 'Non_justfiy',
-        };
-        await this.trackingService.save_abscent_track(new_absennt_track);
+        const annual_vacation =await this.conge.findById(element);
+        const maladie_vacation=await this.maladie.findById(element);
+        for(const ele of annual_vacation){
+          console.log(day_abscent);
+          console.log(ele.Start_date);
+          console.log(ele.End_date);
+          console.log(ele.demande_Status);
+          console.log("___________________________");
+          if(ele.Start_date<=day_abscent && ele.End_date>=day_abscent && ele.demande_Status==="accepté" ){
+            let new_absennt_track = {
+              User_id_ref: element,
+              check_in_date: undefined,
+              check_out_date: undefined,
+              abscent_date: day_abscent,
+              Status: 'abscent',
+              abscent_status: 'justfiy_conge',
+            };
+            await this.trackingService.save_abscent_track(new_absennt_track);
+          }
+          else{
+            let new_absennt_track = {
+              User_id_ref: element,
+              check_in_date: undefined,
+              check_out_date: undefined,
+              abscent_date: day_abscent,
+              Status: 'abscent',
+              abscent_status: 'Non_justfiy',
+            };
+            await this.trackingService.save_abscent_track(new_absennt_track); 
+          }
+        }
+        for(const ele of maladie_vacation){
+          console.log(day_abscent);
+          console.log(ele.Start_date);
+          console.log(ele.End_date);
+          console.log(ele.demande_Status);
+          console.log("___________________________");
+          if(ele.Start_date<=day_abscent && ele.End_date>=day_abscent && ele.demande_Status==="accepté" ){
+            let new_absennt_track = {
+              User_id_ref: element,
+              check_in_date: undefined,
+              check_out_date: undefined,
+              abscent_date: day_abscent,
+              Status: 'abscent',
+              abscent_status: 'justfiy_maladie',
+            };
+            await this.trackingService.save_abscent_track(new_absennt_track);
+          }
+          else{
+            let new_absennt_track = {
+              User_id_ref: element,
+              check_in_date: undefined,
+              check_out_date: undefined,
+              abscent_date: day_abscent,
+              Status: 'abscent',
+              abscent_status: 'Non_justfiy',
+            };
+            await this.trackingService.save_abscent_track(new_absennt_track); 
+          }
+        }
       });
-      console.log(id);
-      console.log(all_user)
-      console.log(abscent_id);
       return 1;
     } catch (error) {
       console.error(error); 
