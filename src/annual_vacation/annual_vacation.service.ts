@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnnualVacationDto } from './dto/create-annual_vacation.dto';
 import { UpdateAnnualVacationDto } from './dto/update-annual_vacation.dto';
-import { Annual_vacation_Schema, Annual_vacation } from '../schemas/annual_vacation.schema';
+import { Annual_vacation } from '../schemas/annual_vacation.schema';
 import {UserService} from '../user/user.service';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+ 
+   
 import { generatePDF, sendEmailWithPDF } from '../email_and_pdf_functions/f'
 import * as fs from 'fs';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AnnualVacationService {
@@ -32,7 +34,8 @@ export class AnnualVacationService {
     return `This action returns a #${id} annualVacation`;
   }
 
- async  update()  {
+  
+ async  update() {
     const created_annual_vacation =  await this.Annual_vacation_Model.find({demande_Status:"Pending"});
      return created_annual_vacation;
   }
@@ -44,14 +47,13 @@ export class AnnualVacationService {
     }
     demande.demande_Status = status;
        await demande.save();
-       if (status === 'accepté') {
+       if (status === 'accepté') { 
         const user = await this.user.findOneById(demande.User_id_ref);
         if (!user) {
           throw new Error('Utilisateur introuvable');
         }
  
          const pdfPath = await generatePDF(demande, user.name,user.familyName);
-
         await sendEmailWithPDF(user.email, pdfPath);
   
         fs.unlinkSync(pdfPath);
@@ -64,8 +66,8 @@ export class AnnualVacationService {
     } catch (error) {
     console.error(error);
   }
-
   }
+
 
   remove(id: number) {
     return `This action removes a #${id} annualVacation`;
