@@ -46,6 +46,9 @@ export class TrackingService {
     return this.trackModel.find({ Status: 'present' });
   }
 
+  findAllabscent() {
+    return this.trackModel.find({ Status: 'abscent' });
+  }
   
   async update(trackingId: Types.ObjectId, date: Date) {
     const updatedTracking = await this.trackModel.findById(trackingId);

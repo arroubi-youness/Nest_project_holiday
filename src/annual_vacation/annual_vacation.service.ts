@@ -57,7 +57,6 @@ export class AnnualVacationService {
       const id_user = element.User_id_ref;
       const Name = user.name;
       const familyName = user.familyName;
-      const position = user.position;
       const Remainain_day = element.Remainain_day;
       const Jour_number = Math.ceil((Number(End_date) - Number(Start_date)) / (1000 * 60 * 60 * 24));
   
@@ -68,7 +67,6 @@ export class AnnualVacationService {
         End_date,
         Name,
         familyName,
-        position,
         Remainain_day,
         Jour_number,
       };

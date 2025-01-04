@@ -81,20 +81,20 @@ export class TrackingController {
           if (!id.toString().includes(a)) {
             abscent_id.push(element._id as Types.ObjectId);
           }
+
         }
-      });
+        
+      }
+    );
 
       const day_abscent = new Date();
       abscent_id.map(async (element) => {
-        const annual_vacation =await this.conge.findById(element);
-        const maladie_vacation=await this.maladie.findById(element);
-        for(const ele of annual_vacation){
-          console.log(day_abscent);
-          console.log(ele.Start_date);
-          console.log(ele.End_date);
-          console.log(ele.demande_Status);
-          console.log("___________________________");
-          if(ele.Start_date<=day_abscent && ele.End_date>=day_abscent && ele.demande_Status==="accepté" ){
+        const annual_vacation = await this.conge.findById(element);
+        const maladie_vacation = await this.maladie.findById(element);
+      
+        let iskayn = false;
+        for (const ele of annual_vacation) {
+          if (ele.Start_date <= day_abscent && ele.End_date >= day_abscent && ele.demande_Status === "accepté") {
             let new_absennt_track = {
               User_id_ref: element,
               check_in_date: undefined,
@@ -104,53 +104,46 @@ export class TrackingController {
               abscent_status: 'justfiy_conge',
             };
             await this.trackingService.save_abscent_track(new_absennt_track);
-          }
-          else{
-            let new_absennt_track = {
-              User_id_ref: element,
-              check_in_date: undefined,
-              check_out_date: undefined,
-              abscent_date: day_abscent,
-              Status: 'abscent',
-              abscent_status: 'Non_justfiy',
-            };
-            await this.trackingService.save_abscent_track(new_absennt_track); 
+            iskayn = true;
+            break;
           }
         }
-        for(const ele of maladie_vacation){
-          console.log(day_abscent);
-          console.log(ele.Start_date);
-          console.log(ele.End_date);
-          console.log(ele.demande_Status);
-          console.log("___________________________");
-          if(ele.Start_date<=day_abscent && ele.End_date>=day_abscent && ele.demande_Status==="accepté" ){
-            let new_absennt_track = {
-              User_id_ref: element,
-              check_in_date: undefined,
-              check_out_date: undefined,
-              abscent_date: day_abscent,
-              Status: 'abscent',
-              abscent_status: 'justfiy_maladie',
-            };
-            await this.trackingService.save_abscent_track(new_absennt_track);
+      
+        if (!iskayn) {
+          for (const ele of maladie_vacation) {
+            if (ele.Start_date <= day_abscent && ele.End_date >= day_abscent && ele.demande_Status === "accepté") {
+              let new_absennt_track = {
+                User_id_ref: element,
+                check_in_date: undefined,
+                check_out_date: undefined,
+                abscent_date: day_abscent,
+                Status: 'abscent',
+                abscent_status: 'justfiy_maladie',
+              };
+              await this.trackingService.save_abscent_track(new_absennt_track);
+              iskayn = true;
+              break;
+            }
           }
-          else{
-            let new_absennt_track = {
-              User_id_ref: element,
-              check_in_date: undefined,
-              check_out_date: undefined,
-              abscent_date: day_abscent,
-              Status: 'abscent',
-              abscent_status: 'Non_justfiy',
-            };
-            await this.trackingService.save_abscent_track(new_absennt_track); 
-          }
+        }
+      
+        if (!iskayn) {
+          let new_absennt_track = {
+            User_id_ref: element,
+            check_in_date: undefined,
+            check_out_date: undefined,
+            abscent_date: day_abscent,
+            Status: 'abscent',
+            abscent_status: 'Non_justfiy',
+          };
+          await this.trackingService.save_abscent_track(new_absennt_track);
         }
       });
-      return 1;
-    } catch (error) {
+      
+     } catch (error) {
       console.error(error); 
-    }
+    } 
+      
   }
   @Delete(':id')
   remove(@Param('id') id: string) {
