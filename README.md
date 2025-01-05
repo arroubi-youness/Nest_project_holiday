@@ -1,3 +1,21 @@
+HR Management System (NestJS)
+A backend application built with NestJS for managing Human Resources processes. This system includes features to track attendance, absences, sick leave (maladie), and annual leave (vacation). It allows HR teams to manage time-off requests, including approvals and notifications. The application also generates PDF reports for attendance, leave, and sick leave records, and sends email notifications for updates and reminders, ensuring seamless communication within the organization.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
